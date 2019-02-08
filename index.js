@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const log4js = require('log4js');
+const TARGET = '카페';
 
 const logConfiguration = {
   appenders: {
@@ -231,7 +232,7 @@ async function go() {
     eLog: 37.7278507,
   };
 
-  const crawler = new naverCrawler(params, '카페');
+  const crawler = new naverCrawler(params, TARGET );
   crawler.crawlItemList(250);
   // const item1 = await crawler.crawlItemDetail(
   //   'https://store.naver.com/restaurants/detail?id=773054532&query=%EC%95%84%EA%BC%AC%EB%96%BC%20%EB%92%A4%20%ED%8C%8C%EB%A5%B4%ED%81%AC',
