@@ -13,12 +13,6 @@ const config = {
       console: {
         type: 'stdout',
       },
-      app: {
-        type: 'file',
-        filename: 'log/app.log',
-        maxLogSize: 10485760,
-        numBackups: 3,
-      },
       errorFile: {
         type: 'file',
         filename: 'log/errors.log',
@@ -34,7 +28,7 @@ const config = {
       },
     },
     categories: {
-      default: { appenders: ['app', 'errors', 'console'], level: 'TRACE' },
+      default: { appenders: ['errors', 'console'], level: 'TRACE' },
       Database: { appenders: ['database', 'console'], level: 'TRACE' },
     },
   },
