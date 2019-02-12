@@ -45,8 +45,12 @@ const crawling = async () => {
       if (results === false) break;
       try {
         for (const cafe of results) {
-          const result = await Cafe.create(cafe);
-          databaseLogger.debug(`Result of '${result.title}' : has successfully saved`);
+          try {
+            const result = await Cafe.create(cafe);
+            databaseLogger.debug(`Result of '${result.title}' : has successfully saved`);
+          } catch (error) {
+            databaseLogger.error(`At page ${index} : ${error.message}`);
+          }
         }
       } catch (error) {
         databaseLogger.error(`At page ${index} : ${error.message}`);

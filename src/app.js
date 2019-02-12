@@ -72,18 +72,28 @@ module.exports = class NaverCrawler {
     await page.goto(`${url}&tab=photo`);
 
     const cafe = {};
-    // const waitOption = { timeout: 3500 };
-    await page.waitFor(1500);
+    const waitOption = { timeout: 3500 };
+    // await page.waitFor(1500);
 
     try {
       const titleSelector = '.biz_name_area > .name';
-      // await page.waitForSelector(titleSelector, waitOption);
+      await page.waitForSelector(titleSelector, waitOption);
       cafe.title = await page.$eval(titleSelector, title => title.innerHTML);
     } catch (error) {
       itemLogger.error(error.message);
       itemLogger.error(`At Crawling : ${url}`);
       await browser.close();
       return;
+    }
+
+    try {
+      const addressesSelector = '.list_item.list_item_address > div.txt span.addr';
+      await page.waitForSelector(addressesSelector, waitOption);
+      const addresses = await page.$$eval(addressesSelector, addrs => addrs.map(addr => addr.innerHTML));
+      cafe.addresses = addresses;
+      cafe.location = await getLatLng(addresses[0]);
+    } catch (error) {
+      console.error(error.message);
     }
 
     try {
@@ -98,16 +108,6 @@ module.exports = class NaverCrawler {
       const contactSelector = '.list_item.list_item_biztel > div.txt';
       // await page.waitForSelector(contactSelector, waitOption);
       cafe.contact = await page.$eval(contactSelector, div => div.innerHTML);
-    } catch (error) {
-      console.error(error.message);
-    }
-
-    try {
-      const addressesSelector = '.list_item.list_item_address > div.txt span.addr';
-      // await page.waitForSelector(addressesSelector, waitOption);
-      const addresses = await page.$$eval(addressesSelector, addrs => addrs.map(addr => addr.innerHTML));
-      cafe.addresses = addresses;
-      cafe.location = await getLatLng(addresses[0]);
     } catch (error) {
       console.error(error.message);
     }
