@@ -42,8 +42,8 @@ module.exports = class NaverCrawler {
 
     let linkList;
     try {
+      await page.waitForSelector('li.list_item.type_restaurant a.name', { timeout: 3000 });
       linkList = await page.$$eval('li.list_item.type_restaurant a.name', links => links.map(link => link.getAttribute('href')));
-      if (linkList.length === 0) return false;
     } catch (error) {
       listLogger.error(error.message);
       listLogger.error(`At Crawling : ${query}`);
@@ -52,12 +52,14 @@ module.exports = class NaverCrawler {
     }
 
     const results = [];
-    for (const link of linkList) {
-      try {
-        results.push(await crawlItemDetail(link));
-      } catch (error) {
-        itemLogger.error(error.message);
-        itemLogger.error(`At Crawling : ${itemPage}`);
+    if (linkList) {
+      for (const link of linkList) {
+        try {
+          results.push(await crawlItemDetail(link));
+        } catch (error) {
+          itemLogger.error(error.message);
+          itemLogger.error(`At Crawling : ${itemPage}`);
+        }
       }
     }
 

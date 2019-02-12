@@ -20,7 +20,7 @@ const lngDiff = eLng - sLng;
 const latStep = latDiff / 20;
 const lngStep = lngDiff / 20;
 
-const crawling = async () => {
+const crawling = async (X = 0, Y = 0, page = 1) => {
   const params = {
     sLat,
     eLat: sLat + latStep,
@@ -29,13 +29,17 @@ const crawling = async () => {
   };
   const query = '카페';
 
-  let x = 0;
-  let y = 0;
+  let x = X;
+  let y = Y;
+
+  if (X !== 0 || Y !== 0) {
+    params.sLat = sLat + (latStep * X);
+    params.sLng = sLng + (lngStep * Y);
+  }
+
   while (y !== 20) {
     databaseLogger.trace(`Crawl '${x + 1}' x '${y + 1}' region`);
-
-    let index = 1;
-
+    let index = page;
     let results = [];
     while (results !== false) {
       databaseLogger.trace(`Start Crawling page '${index}'`);
