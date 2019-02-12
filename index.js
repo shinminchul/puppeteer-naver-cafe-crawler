@@ -34,29 +34,27 @@ const crawling = async (X = 0, Y = 0, page = 1) => {
 
   if (X !== 0 || Y !== 0) {
     params.sLat = sLat + (latStep * X);
+    params.eLat = eLat + (latStep * X);
     params.sLng = sLng + (lngStep * Y);
+    params.eLng = eLng + (lngStep * Y);
   }
 
   while (y !== 20) {
     databaseLogger.trace(`Crawl '${x + 1}' x '${y + 1}' region`);
     let index = page;
     let results = [];
-    while (results !== false) {
+    while (results.length > 0) {
       databaseLogger.trace(`Start Crawling page '${index}'`);
       const crawler = new NaverCrawler(params, query);
       results = await crawler.crawlItemList(index);
       index += 1;
-      if (Array.isArray(results)) {
-        for (const cafe of results) {
-          try {
-            const result = await Cafe.create(cafe);
-            databaseLogger.debug(`Result of '${result.title}' : has successfully saved`);
-          } catch (error) {
-            databaseLogger.error(`At page ${index} : ${error.message}`);
-          }
+      for (const cafe of results) {
+        try {
+          const result = await Cafe.create(cafe);
+          databaseLogger.debug(`Result of '${result.title}' : has successfully saved`);
+        } catch (error) {
+          databaseLogger.error(`At page ${index} : ${error.message}`);
         }
-      } else {
-        databaseLogger.error(`At page ${index} : ${results} is not iterable`);
       }
     }
 
