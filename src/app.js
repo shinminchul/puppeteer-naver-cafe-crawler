@@ -31,6 +31,7 @@ module.exports = class NaverCrawler {
       browser = await puppeteer.launch();
       page = await browser.newPage();
       const url = `${this.baseURL}?${query}`;
+      listLogger.trace(`Start crawling url : ${url}`);
       await page.goto(url);
     } catch (error) {
       puppeteerLogger.error(error.message);

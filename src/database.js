@@ -37,4 +37,4 @@ const cafeSchema = new Schema({
   tagId: { type: Schema.Types.ObjectId, ref: 'Tags' },
 });
 
-module.exports = model('Cafes', cafeSchema);
+module.exports = model('newCafe', cafeSchema);

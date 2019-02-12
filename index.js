@@ -9,21 +9,33 @@ const Cafe = require('./src/database');
 //   sLng: 37.2551985
 //   eLng: 37.7278507
 
+const sLat = 126.5571948;
+const eLat = 127.6544364;
+const sLng = 37.2551985;
+const eLng = 37.7278507;
+
+const latDiff = eLat - sLat;
+const lngDiff = eLng - sLng;
+
+const latStep = latDiff / 20;
+const lngStep = lngDiff / 20;
+
 const crawling = async () => {
   const params = {
-    sLat: 127.2171948,
-    eLat: 127.3271948,
-    sLng: 37.4051985,
-    eLng: 37.4551985,
+    sLat,
+    eLat: sLat + latStep,
+    sLng,
+    eLng: sLng + lngStep,
   };
   const query = '카페';
 
-  let x = 6;
-  let y = 3;
-  while (y !== 10) {
+  let x = 0;
+  let y = 0;
+  while (y !== 20) {
     databaseLogger.trace(`Crawl '${x + 1}' x '${y + 1}' region`);
 
     let index = 1;
+
     let results = [];
     while (results !== false) {
       databaseLogger.trace(`Start Crawling page '${index}'`);
@@ -41,14 +53,14 @@ const crawling = async () => {
       }
     }
 
-    params.sLat += 0.11;
-    params.eLat += 0.11;
+    params.sLat += latStep;
+    params.eLat += latStep;
     x += 1;
-    if (x === 10) {
-      params.sLat -= 1.1;
-      params.eLat -= 1.1;
-      params.sLng += 0.05;
-      params.eLng += 0.05;
+    if (x === 20) {
+      params.sLat -= latDiff;
+      params.eLat -= latDiff;
+      params.sLng += lngStep;
+      params.eLng += lngStep;
       x = 0;
       y += 1;
     }
