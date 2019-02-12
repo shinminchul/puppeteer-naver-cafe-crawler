@@ -37,7 +37,7 @@ module.exports = class NaverCrawler {
       puppeteerLogger.error(error.message);
       puppeteerLogger.error(`At Crawling : ${query}`);
       await browser.close();
-      return;
+      return [];
     }
 
     let linkList;
@@ -45,10 +45,9 @@ module.exports = class NaverCrawler {
       await page.waitForSelector('li.list_item.type_restaurant a.name', { timeout: 3000 });
       linkList = await page.$$eval('li.list_item.type_restaurant a.name', links => links.map(link => link.getAttribute('href')));
     } catch (error) {
-      listLogger.error(error.message);
-      listLogger.error(`At Crawling : ${query}`);
+      listLogger.error(`No list at : ${sLat} - ${sLng} - ${eLat} - ${eLng} at page ${itemPage}`);
       await browser.close();
-      return;
+      return [];
     }
 
     const results = [];

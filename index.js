@@ -40,13 +40,13 @@ const crawling = async (X = 0, Y = 0, page = 1) => {
   }
 
   while (y !== 20) {
-    databaseLogger.trace(`Crawl '${x + 1}' x '${y + 1}' region`);
     let index = page;
-    let results = [];
-    while (results.length > 0) {
-      databaseLogger.trace(`Start Crawling page '${index}'`);
+    let hasResult = true;
+    while (hasResult) {
+      databaseLogger.trace(`Crawl '${x}' x '${y}' at page ${index}`);
       const crawler = new NaverCrawler(params, query);
-      results = await crawler.crawlItemList(index);
+      const results = await crawler.crawlItemList(index);
+      if (results.length === 0) hasResult = false;
       index += 1;
       for (const cafe of results) {
         try {
