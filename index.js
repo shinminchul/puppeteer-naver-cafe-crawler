@@ -42,8 +42,7 @@ const crawling = async () => {
       const crawler = new NaverCrawler(params, query);
       results = await crawler.crawlItemList(index);
       index += 1;
-      if (results === false) break;
-      try {
+      if (Array.isArray(results)) {
         for (const cafe of results) {
           try {
             const result = await Cafe.create(cafe);
@@ -52,8 +51,8 @@ const crawling = async () => {
             databaseLogger.error(`At page ${index} : ${error.message}`);
           }
         }
-      } catch (error) {
-        databaseLogger.error(`At page ${index} : ${error.message}`);
+      } else {
+        databaseLogger.error(`At page ${index} : ${results} is not iterable`);
       }
     }
 
