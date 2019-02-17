@@ -42,7 +42,7 @@ module.exports = class NaverCrawler {
 
     let linkList;
     try {
-      await page.waitForSelector('li.list_item.type_restaurant a.name', { timeout: 3000 });
+      await page.waitForSelector('li.list_item.type_restaurant a.name', { timeout: 10000 });
       linkList = await page.$$eval('li.list_item.type_restaurant a.name', links => links.map(link => link.getAttribute('href')));
     } catch (error) {
       listLogger.error(`No list at : ${sLat} - ${sLng} - ${eLat} - ${eLng} at page ${itemPage}`);
