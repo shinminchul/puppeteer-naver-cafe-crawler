@@ -4,6 +4,8 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 const geocode = require('util').promisify(googleMapsClient.geocode);
 
+//추가 수정사항 
+
 exports.getLatLng = async (address) => {
   try {
     const response = await geocode({ address });
